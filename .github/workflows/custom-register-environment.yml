@@ -43,8 +43,9 @@ jobs:
       - name: create-environment-from-file-with-conda
         if: ${{ inputs.conda_file != ''}}
         run: |
-          az ml environment create --file "${{ inputs.environment_file }}" --resource-group ${{ inputs.resource_group }} \
-                                --workspace-name ${{ inputs.workspace_name }} --conda-file "${{ inputs.conda_file }}"
+          conda_win="$(cygpath -aw "${{ inputs.conda_file }}")"
+          MSYS_NO_PATHCONV=1 az ml environment create --file "${{ inputs.environment_file }}" --resource-group ${{ inputs.resource_group }} \
+                                --workspace-name ${{ inputs.workspace_name }} --conda-file "$conda_win"
       - name: create-environment-from-file-without-conda
         if: ${{ inputs.conda_file == ''}}
         run: |
